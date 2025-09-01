@@ -1,0 +1,206 @@
+USE [ERPDemo]
+GO
+/****** Object:  UserDefinedTableType [dbo].[OrderItemsType]    Script Date: 9/1/2025 10:09:24 PM ******/
+CREATE TYPE [dbo].[OrderItemsType] AS TABLE(
+	[ProductID] [int] NULL,
+	[Quantity] [int] NULL,
+	[Price] [decimal](10, 2) NULL
+)
+GO
+/****** Object:  Table [dbo].[Customer]    Script Date: 9/1/2025 10:09:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Customer](
+	[customerID] [int] IDENTITY(1,1) NOT NULL,
+	[CustomerName] [nvarchar](35) NULL,
+	[CustomerAddress] [nvarchar](80) NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[OrderItems]    Script Date: 9/1/2025 10:09:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[OrderItems](
+	[OrderItemID] [int] IDENTITY(1,1) NOT NULL,
+	[OrderID] [int] NULL,
+	[ProductID] [int] NULL,
+	[Quantity] [int] NULL,
+	[Price] [decimal](10, 2) NULL,
+	[LineTotal]  AS ([Quantity]*[Price]),
+PRIMARY KEY CLUSTERED 
+(
+	[OrderItemID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Orders]    Script Date: 9/1/2025 10:09:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Orders](
+	[OrderID] [int] IDENTITY(1,1) NOT NULL,
+	[OrderNumber] [nvarchar](50) NULL,
+	[OrderDate] [datetime] NULL,
+	[CustomerID] [int] NULL,
+	[CustomerAddress] [nvarchar](100) NULL,
+	[TotalAmount] [decimal](10, 2) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[OrderID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Products]    Script Date: 9/1/2025 10:09:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Products](
+	[ProductID] [int] IDENTITY(1,1) NOT NULL,
+	[ProductName] [nvarchar](50) NULL,
+	[ProductPrice] [decimal](10, 2) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ProductID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Orders] ADD  DEFAULT (getdate()) FOR [OrderDate]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_AddCustomer]    Script Date: 9/1/2025 10:09:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[SP_AddCustomer]
+    @CustomerName NVARCHAR(100),
+    @CustomerAddress NVARCHAR(100)
+AS
+BEGIN
+    INSERT INTO Customers (CustomerName, CustomerAddress)
+    VALUES (@CustomerName, @CustomerAddress);
+
+    SELECT SCOPE_IDENTITY() AS NewCustomerID;
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[SP_AddProduct]    Script Date: 9/1/2025 10:09:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[SP_AddProduct]
+    @ProductName NVARCHAR(100),
+    @Price DECIMAL(10,2)
+AS
+BEGIN
+    INSERT INTO Products (ProductName, ProductPrice)
+    VALUES (@ProductName, @Price);
+
+    SELECT SCOPE_IDENTITY() AS NewProductID;
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[SP_CreateOrder]    Script Date: 9/1/2025 10:09:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[SP_CreateOrder]
+    @OrderNumber NVARCHAR(50),
+    @CustomerID INT,
+    @CustomerAddress NVARCHAR(200),
+    @OrderItems dbo.OrderItemsType READONLY
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Prevent duplicate OrderNumber
+        IF EXISTS (SELECT 1 FROM Orders WHERE OrderNumber = @OrderNumber)
+        BEGIN
+            RAISERROR('OrderNumber already exists', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+        -- Insert Order
+        INSERT INTO Orders (OrderNumber, CustomerID, CustomerAddress)
+        VALUES (@OrderNumber, @CustomerID, @CustomerAddress);
+
+        DECLARE @OrderId INT = SCOPE_IDENTITY();
+
+        -- Insert Order Items
+        INSERT INTO OrderItems (OrderId, ProductId, Quantity, Price)
+        SELECT @OrderId, ProductId, Quantity, Price FROM @OrderItems;
+
+        COMMIT TRANSACTION;
+
+        -- Return newly created OrderId
+        SELECT @OrderId AS NewOrderId;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+
+        DECLARE @ErrMsg NVARCHAR(4000), @ErrSeverity INT;
+    SELECT 
+        @ErrMsg = ERROR_MESSAGE(),
+        @ErrSeverity = ERROR_SEVERITY();
+
+    RAISERROR(@ErrMsg, @ErrSeverity, 1);
+    END CATCH
+END
+GO
+/****** Object:  StoredProcedure [dbo].[SP_GetOrderDetails]    Script Date: 9/1/2025 10:09:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[SP_GetOrderDetails]
+    @OrderID INT
+AS
+BEGIN
+    SELECT o.OrderID, o.OrderNumber, o.TotalAmount, 
+           c.CustomerName, c.CustomerAddress, 
+           oi.ProductID, p.ProductName, oi.Quantity, oi.Price, oi.LineTotal
+    FROM Orders o
+    INNER JOIN Customers c ON o.CustomerID = c.CustomerID
+    INNER JOIN OrderItems oi ON o.OrderID = oi.OrderID
+    INNER JOIN Products p ON oi.ProductID = p.ProductID
+    WHERE o.OrderID = @OrderID;
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[SP_GetProductsWithinDateRange]    Script Date: 9/1/2025 10:09:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[SP_GetProductsWithinDateRange]
+    @StartDate DATE,
+    @EndDate DATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        p.ProductID,
+        p.ProductName,
+        c.CustomerID,
+        c.CustomerName,
+        SUM(oi.Quantity) AS TotalQuantityBought,
+        SUM(oi.LineTotal) AS TotalAmountSpent,
+        COUNT(DISTINCT o.OrderID) AS TotalOrders
+    FROM Orders o
+    INNER JOIN Customer c ON o.CustomerID = c.CustomerID
+    INNER JOIN OrderItems oi ON o.OrderID = oi.OrderID
+    INNER JOIN Products p ON oi.ProductID = p.ProductID
+    WHERE o.OrderDate >= @StartDate
+  AND o.OrderDate < DATEADD(DAY, 1, @EndDate)
+    GROUP BY p.ProductID, p.ProductName, c.CustomerID, c.CustomerName
+    ORDER BY p.ProductName, c.CustomerName;
+END;
+GO
