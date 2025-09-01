@@ -1,0 +1,6 @@
+@ERPDemo_Sujith_HostAddress = http://localhost:5197
+
+GET {{ERPDemo_Sujith_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

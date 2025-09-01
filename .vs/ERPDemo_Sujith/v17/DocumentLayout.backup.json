@@ -1,0 +1,133 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\ASP Basic\\ERPDemo_Sujith\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D722F589-88FC-47B9-9DFB-D272C074A9A0}|ERPDemo_Sujith.csproj|d:\\asp basic\\erpdemo_sujith\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D722F589-88FC-47B9-9DFB-D272C074A9A0}|ERPDemo_Sujith.csproj|solutionrelative:controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D722F589-88FC-47B9-9DFB-D272C074A9A0}|ERPDemo_Sujith.csproj|d:\\asp basic\\erpdemo_sujith\\models\\dtos\\productsolddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D722F589-88FC-47B9-9DFB-D272C074A9A0}|ERPDemo_Sujith.csproj|solutionrelative:models\\dtos\\productsolddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D722F589-88FC-47B9-9DFB-D272C074A9A0}|ERPDemo_Sujith.csproj|d:\\asp basic\\erpdemo_sujith\\models\\dtos\\createorderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D722F589-88FC-47B9-9DFB-D272C074A9A0}|ERPDemo_Sujith.csproj|solutionrelative:models\\dtos\\createorderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D722F589-88FC-47B9-9DFB-D272C074A9A0}|ERPDemo_Sujith.csproj|d:\\asp basic\\erpdemo_sujith\\models\\dtos\\orderitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D722F589-88FC-47B9-9DFB-D272C074A9A0}|ERPDemo_Sujith.csproj|solutionrelative:models\\dtos\\orderitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D722F589-88FC-47B9-9DFB-D272C074A9A0}|ERPDemo_Sujith.csproj|d:\\asp basic\\erpdemo_sujith\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{D722F589-88FC-47B9-9DFB-D272C074A9A0}|ERPDemo_Sujith.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D722F589-88FC-47B9-9DFB-D272C074A9A0}|ERPDemo_Sujith.csproj|d:\\asp basic\\erpdemo_sujith\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D722F589-88FC-47B9-9DFB-D272C074A9A0}|ERPDemo_Sujith.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 9,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ProductSoldDto.cs",
+              "DocumentMoniker": "D:\\ASP Basic\\ERPDemo_Sujith\\Models\\DTOs\\ProductSoldDto.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\ProductSoldDto.cs",
+              "ToolTip": "D:\\ASP Basic\\ERPDemo_Sujith\\Models\\DTOs\\ProductSoldDto.cs",
+              "RelativeToolTip": "Models\\DTOs\\ProductSoldDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T14:19:23.684Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "OrderItemDto.cs",
+              "DocumentMoniker": "D:\\ASP Basic\\ERPDemo_Sujith\\Models\\DTOs\\OrderItemDto.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\OrderItemDto.cs",
+              "ToolTip": "D:\\ASP Basic\\ERPDemo_Sujith\\Models\\DTOs\\OrderItemDto.cs",
+              "RelativeToolTip": "Models\\DTOs\\OrderItemDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T14:18:47.24Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\ASP Basic\\ERPDemo_Sujith\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "D:\\ASP Basic\\ERPDemo_Sujith\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAABfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-09-01T13:25:36.325Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\ASP Basic\\ERPDemo_Sujith\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\ASP Basic\\ERPDemo_Sujith\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T13:20:42.823Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CreateOrderDto.cs",
+              "DocumentMoniker": "D:\\ASP Basic\\ERPDemo_Sujith\\Models\\DTOs\\CreateOrderDto.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\CreateOrderDto.cs",
+              "ToolTip": "D:\\ASP Basic\\ERPDemo_Sujith\\Models\\DTOs\\CreateOrderDto.cs",
+              "RelativeToolTip": "Models\\DTOs\\CreateOrderDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T13:20:16.325Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "OrderController.cs",
+              "DocumentMoniker": "D:\\ASP Basic\\ERPDemo_Sujith\\Controllers\\OrderController.cs",
+              "RelativeDocumentMoniker": "Controllers\\OrderController.cs",
+              "ToolTip": "D:\\ASP Basic\\ERPDemo_Sujith\\Controllers\\OrderController.cs",
+              "RelativeToolTip": "Controllers\\OrderController.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAiwCYAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T13:10:28.362Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
