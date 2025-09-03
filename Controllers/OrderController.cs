@@ -1,4 +1,5 @@
 ﻿using ERPDemo_Sujith.Models.DTOs;
+using ERPDemo_Sujith.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -8,13 +9,14 @@ using System.Security.AccessControl;
 
 namespace ERPDemo_Sujith.Controllers
 {
-    [Route("api/OrderController")] 
+    [Route("api/OrderController")]
     public class OrderController : Controller
     {
-        private readonly string _connection;
-        public OrderController(IConfiguration configuration)
+        private readonly IOrderService _orderService;
+
+        public OrderController(IOrderService orderService)
         {
-            _connection = configuration.GetConnectionString("DBConnection");
+            _orderService = orderService;
         }
 
         [HttpPost("create-customer")]
@@ -22,17 +24,8 @@ namespace ERPDemo_Sujith.Controllers
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(_connection))
-                using (SqlCommand cmd = new SqlCommand("SP_CreateCustomer", conn))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@Name", customerDto.Name);
-                    cmd.Parameters.AddWithValue("@Address", customerDto.Address);
-
-                    conn.Open();
-                    var newCustomerId = cmd.ExecuteScalar();
-                    return Ok(new { CustomerId = newCustomerId });
-                }
+                var id = _orderService.CreateCustomer(customerDto);
+                return Ok(new { CustomerId = id });
             }
             catch (Exception ex)
             {
@@ -45,17 +38,8 @@ namespace ERPDemo_Sujith.Controllers
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(_connection))
-                using (SqlCommand cmd = new SqlCommand("SP_CreateProduct", conn))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@ProductName", productDto.ProductName);
-                    cmd.Parameters.AddWithValue("@Price", productDto.Price);
-
-                    conn.Open();
-                    var newProductId = cmd.ExecuteScalar();
-                    return Ok(new { ProductId = newProductId });
-                }
+                var id = _orderService.CreateProduct(productDto);
+                return Ok(new { ProductId = id });
             }
             catch (Exception ex)
             {
@@ -64,40 +48,14 @@ namespace ERPDemo_Sujith.Controllers
         }
 
         [HttpPost("create-order")]
-            public IActionResult CreateOrder([FromBody] CreateOrderDto orderDto)
+        public IActionResult CreateOrder([FromBody] CreateOrderDto orderDto)
+        {
+            try
             {
-                try
-                {
-                    using (SqlConnection conn = new SqlConnection(_connection))
-                    using (SqlCommand cmd = new SqlCommand("SP_CreateOrder", conn))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-
-                        cmd.Parameters.AddWithValue("@OrderNumber", orderDto.OrderNumber);
-                        cmd.Parameters.AddWithValue("@CustomerID", orderDto.CustomerID);
-                        cmd.Parameters.AddWithValue("@CustomerAddress", orderDto.CustomerAddress);
-
-                        // Table-Valued Parameter
-                        DataTable orderItemsTable = new DataTable();
-                        orderItemsTable.Columns.Add("ProductID", typeof(int));
-                        orderItemsTable.Columns.Add("Quantity", typeof(int));
-                        orderItemsTable.Columns.Add("Price", typeof(decimal));
-
-                        foreach (var item in orderDto.Items)
-                        {
-                            orderItemsTable.Rows.Add(item.ProductId, item.Quantity, item.Price);
-                        }
-
-                        SqlParameter tvpParam = cmd.Parameters.AddWithValue("@OrderItems", orderItemsTable);
-                        tvpParam.SqlDbType = SqlDbType.Structured;
-                        tvpParam.TypeName = "dbo.OrderItemsType";
-
-                        conn.Open();
-                        var newOrderId = cmd.ExecuteScalar();
-                        return Ok(new { OrderId = newOrderId });
-                    }
-                }
-                catch (Exception ex)
+                var newOrderId = _orderService.CreateOrder(orderDto);
+                return Ok(new { OrderId = newOrderId });
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, new { Error = ex.Message });
             }
@@ -105,37 +63,8 @@ namespace ERPDemo_Sujith.Controllers
         [HttpGet("GetProductsSold")]
         public IActionResult GetProductsSold(DateTime startDate, DateTime endDate)
         {
-            var productsSold = new List<ProductSoldDto>();
-
-            using (SqlConnection con = new SqlConnection(_connection))
-            {
-                using (SqlCommand cmd = new SqlCommand("SP_GetProductsWithinDateRange", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@StartDate", startDate);
-                    cmd.Parameters.AddWithValue("@EndDate", endDate);
-
-                    con.Open();
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            productsSold.Add(new ProductSoldDto
-                            {
-                                ProductID = Convert.ToInt32(reader["ProductID"]),
-                                ProductName = reader["ProductName"].ToString(),
-                                CustomerID = Convert.ToInt32(reader["CustomerID"]),
-                                CustomerName = reader["CustomerName"].ToString(),
-                                TotalQuantity = Convert.ToInt32(reader["TotalQuantityBought"]),
-                                TotalAmount = Convert.ToDecimal(reader["TotalAmountSpent"]),
-                                TotalOrders = Convert.ToInt32(reader["TotalOrders"])
-                            });
-                        }
-                    }
-                }
-            }
-
-            return Ok(productsSold);
+            var products = _orderService.GetProductsWithinDateRange(startDate, endDate);
+            return Ok(products);
         }
-}
+    }
 }

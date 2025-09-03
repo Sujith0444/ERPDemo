@@ -81,7 +81,7 @@ CREATE PROCEDURE [dbo].[SP_AddCustomer]
     @CustomerAddress NVARCHAR(100)
 AS
 BEGIN
-    INSERT INTO Customers (CustomerName, CustomerAddress)
+    INSERT INTO Customer (CustomerName, CustomerAddress)
     VALUES (@CustomerName, @CustomerAddress);
 
     SELECT SCOPE_IDENTITY() AS NewCustomerID;
