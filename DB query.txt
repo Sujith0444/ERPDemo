@@ -137,6 +137,17 @@ BEGIN
         INSERT INTO OrderItems (OrderId, ProductId, Quantity, Price)
         SELECT @OrderId, ProductId, Quantity, Price FROM @OrderItems;
 
+	DECLARE @TotalAmount DECIMAL(18,2);
+
+        SELECT @TotalAmount = SUM(Quantity * Price)
+        FROM OrderItems
+        WHERE OrderId = @OrderId;
+
+        -- Update Orders with TotalAmount
+        UPDATE Orders
+        SET TotalAmount = @TotalAmount
+        WHERE OrderId = @OrderId;
+
         COMMIT TRANSACTION;
 
         -- Return newly created OrderId
